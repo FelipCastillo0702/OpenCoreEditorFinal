@@ -757,12 +757,17 @@ class MainWindow(QMainWindow):
     
     def save_git(self):
         
-        # Clonamos el repositorio a nuestra computadora 
-        os.system("git clone <url del repositorio>")  
-
-        # Guardamos los cambios localmente  
-
-        os.system("git add . && git commit -m 'Actualización' && git push origin master")
+        repo_dir = "/Users/felipecastillo/Desktop/ProyectosFelipe/Visual Studio/OpenCoreEditorFinal/.git/"
+        
+        repo = git.Repo(repo_dir)
+        
+        repo.git.add(A=True)
+    
+        repo.index.commit("Mensaje del commit") 
+        
+        origin = repo.remote('origin')   
+        
+        origin.push()
         
     
     def closeEvent(self, event):
