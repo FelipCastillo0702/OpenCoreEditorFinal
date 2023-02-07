@@ -754,6 +754,7 @@ class MainWindow(QMainWindow):
         stdout = bytes(data).decode("utf8")
         self.field_result_output.append(stdout)
         
+        a
     
     def save_git(self):
         
