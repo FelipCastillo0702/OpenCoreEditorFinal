@@ -4,6 +4,7 @@ import re
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtWidgets import QListWidgetItem
 
+
 class SearchItem(QListWidgetItem):
     def __init__(self, name, full_path, lineno, end, line):
         self.name = name

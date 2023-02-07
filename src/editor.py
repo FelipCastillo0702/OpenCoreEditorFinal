@@ -3,7 +3,7 @@ from PyQt5.Qsci import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-
+import config,sys,os
 from lexer import PyCustomLexer
 from autocompleter import AutoCompleter
 
@@ -16,11 +16,14 @@ class Editor(QsciScintilla):
         self.full_path = self.path.absolute()
         self.is_python_file = python_file
         self.venv = env
-        
+
 
     
+
+        
+    
         self.cursorPositionChanged.connect(self.cursorPositionChangedCustom)
- 
+
         # encoding       
         self.setUtf8(True)
         # font
@@ -35,6 +38,8 @@ class Editor(QsciScintilla):
         self.setIndentationGuides(True)
         self.setIndentationsUseTabs(True)
         self.setAutoIndent(True)
+        
+        
 
         # autocomplete
         self.setAutoCompletionSource(QsciScintilla.AcsAll)
@@ -58,7 +63,7 @@ class Editor(QsciScintilla):
 
         if self.is_python_file:
             # lexer
-            self.pylexer = PyCustomLexer(self)
+            self.pylexer = QsciLexerPython(self)
             # QsciLexerPython
             self.pylexer.setDefaultFont(self.font)
 
@@ -122,6 +127,30 @@ class Editor(QsciScintilla):
         # editor.marginClicked.connect(self.handle_margin)
 
         self.indicatorDefine(QsciScintilla.SquigglePixmapIndicator, 0)
+        
+    def setLang(self, lex):
+        if lex in config.LEXERS:
+            self.lexer = self.getLexer(lex)
+        else:
+            self.lexer = lex
+        self.lexer.setDefaultFont(config.font)
+        self.lexer.setDefaultColor(QColor("Black"))
+        self.setLexer(self.lexer)
+        # Setting the lexer resets the margin background to gray
+        # so it has to be reset to white
+        self.setMarginsBackgroundColor(QColor("White"))
+        # Comments use a serifed font by default so
+        # they have to be set to use the same font
+        self.lexer.setFont(config.font, 1)
+
+    def getLexer(self, lex):
+        self.lexer = config.LEXERS.get(lex)
+        # Workaround because setting a lexer would set
+        # the background to black and the text to white
+        self.lexer.setDefaultPaper(QColor("White"))
+        self.lexer.setDefaultColor(QColor("Black"))
+        return self.lexer
+
 
     @property
     def autocomplete(self):

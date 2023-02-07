@@ -1,0 +1,166 @@
+grammar Ani;
+
+//JQ 20112022
+//Modificaciones para  :
+// sentencia SWITCH
+//sentencia FOR databese.function
+//sentencia While condicon
+//tipos de datos
+//funciones .trim(), lowercase()
+//sentencia struct
+//tipon datos list
+//continue en sentencia for
+//TODO falta definir una variable literal con comillas
+//TODO falta manejar variables boolean vator true y false
+//TODO falta implementar funciones sobre variables ej: trim()
+//TODO por alguna razon cuando la sentencia switch queda en la primera linea del archivo, da error
+//TODO falta definir float, que se usa punto o coma?
+//TODO falta list . add ej: listaCliente.add(clienteObj)
+//TODO como instancia una clase ej: x = MyClass()
+
+
+//casos de prueba para esta version
+a=1
+class cliente :
+    int rut=1
+    str nombre=20
+    class direccionCliente :
+          str calle= 1
+          int numero=10
+          str ciudad=20
+    end
+end
+struct x:
+  str texto=1
+  int edad=10
+  struct direccion :
+      str calle=1
+      int numero=100
+      str ciudad=22
+  end
+end
+list listaClientes
+int i=10 + 10 * 20
+float sueldo=10
+boolean sw=1
+boolean x=1
+switch cliente
+case 100 :
+  a=100
+  c=25
+  x=cliente.rut
+case 200 :
+  a=200
+  continue saltacliente :
+  for cliente in listClientes :
+         c=1000
+         b=400
+         for material in listaMateriales:
+             a=1
+             continue saltacliente
+         end
+  end
+  if (a=20):
+      for contabilidad.read view (par1 par2) :
+             c=1000
+             b=400
+             break
+      end
+     c=45000
+     b=400
+  else
+      sqlPlanCuentas=1
+      for contabilidad.read sqlPlanCuentas :
+         c=1000
+         b=400
+         break
+      end
+     c=8000
+  end
+default:
+  rut=1
+  for contabilidad.read sqlPlanCuentas :
+         c=1000
+         b=400
+         break
+  end
+  while isTrue :
+         c=1000
+         b=400
+         if isTrue:
+            break
+         end
+  end
+end
+a=1
+class cliente :
+    int rut=1
+    str nombre=20
+    class direccionCliente :
+          str calle= 1
+          int numero=10
+          str ciudad=20
+    end
+end
+struct x:
+  str texto=1
+  int edad=10
+  struct direccion :
+      str calle=1
+      int numero=100
+      str ciudad=22
+  end
+end
+list listaClientes
+int i=10 + 10 * 20
+float sueldo=10
+boolean sw=1
+boolean x=1
+switch cliente
+case 100 :
+  a=100
+  c=25
+  x=cliente.rut
+case 200 :
+  a=200
+  continue saltacliente :
+  for cliente in listClientes :
+         c=1000
+         b=400
+         for material in listaMateriales:
+             a=1
+             continue saltacliente
+         end
+  end
+  if (a=20):
+      for contabilidad.read view (par1 par2) :
+             c=1000
+             b=400
+             break
+      end
+     c=45000
+     b=400
+  else
+      sqlPlanCuentas=1
+      for contabilidad.read sqlPlanCuentas :
+         c=1000
+         b=400
+         break
+      end
+     c=8000
+  end
+default:
+  rut=1
+  for contabilidad.read sqlPlanCuentas :
+         c=1000
+         b=400
+         break
+  end
+  while isTrue :
+         c=1000
+         b=400
+         if isTrue:
+            break
+         end
+  end
+end

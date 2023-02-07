@@ -5,14 +5,13 @@ from PyQt5.Qsci import *
 from editor import Editor
 from file_manager import FileManager
 from fuzzy_searcher import SearchItem, SearchWorker
+from TextLexer import QsciLexerText
 import resources
 
-from lexer import PyCustomLexer
-import sys
-import os
+import config,sys,os
 from pathlib import Path
 import jedi
-
+import git
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -60,6 +59,117 @@ class MainWindow(QMainWindow):
         editor = Editor(path=path, env=venv, python_file=is_python_file)
 
         return editor
+    
+    def initLexers(self):
+        # Dict that maps lexer actions to their respective strings
+        self.lexActs = {}
+        langGrp = QActionGroup(self.lang)
+        langGrp.setExclusive(True)
+        self.lang.addAction(self.noLexAct)
+        self.noLexAct.setCheckable(True)
+        #self.noLexAct.setChecked(True)
+        self.noLexAct.setActionGroup(langGrp)
+        self.lang.addSeparator()
+        languages = sorted(config.LEXERS.keys())
+        for i in languages:
+            langAct = self.lang.addAction(i)
+            langAct.setCheckable(True)
+            langAct.setActionGroup(langGrp)
+            self.lexActs[langAct] = i
+        langGrp.triggered.connect(lambda lex: self.getEditor(self.tabNum+1).setLang(self.lexActs.get(lex)))
+    
+    
+    def guessLexer(self):
+        try:
+            x = config.docList[self.tab.currentIndex()+1]
+            n, e = os.path.basename(x).lower().split(".")
+            if e == "sh" or e == "bsh":
+                self.getEditor(self.tabNum).setLang("Bash")
+            elif e == "cmd" or e == "bat" or e == "btm" or e == "nt":
+                self.getEditor(self.tabNum).setLang("Batch")
+            elif e == "cmake" or e == "cmakelists":
+                self.getEditor(self.tabNum).setLang("CMake")
+            elif e == "cpp" or e == "cxx" or e == "cc" or e == "c" or e == "h"\
+            or e == "hh" or e == "hpp":
+                self.getEditor(self.tabNum).setLang("C++")
+            elif e == "cs":
+                self.getEditor(self.tabNum).setLang("C#")
+            elif e == "css":
+                self.getEditor(self.tabNum).setLang("CSS")
+            elif e == "d":
+                self.getEditor(self.tabNum).setLang("D")
+            elif e == "diff" or e == "patch":
+                self.getEditor(self.tabNum).setLang("Diff")
+            elif e == "f90" or e == "f95" or e == "f2k" or e == "f03" or e == "f15":
+                self.getEditor(self.tabNum).setLang("Fortran")
+            elif e == "f" or e == "for":
+                self.getEditor(self.tabNum).setLang("Fortran77")
+            elif e == "html" or e == "htm":
+                self.getEditor(self.tabNum).setLang("HTML")
+            elif e == "java":
+                self.getEditor(self.tabNum).setLang("Java")
+            elif e == "js":
+                self.getEditor(self.tabNum).setLang("JavaScript")
+            elif e == "lua":
+                self.getEditor(self.tabNum).setLang("Lua")
+            elif e == "mak" or n == "gnumakefile" or n == "makefile":
+                self.getEditor(self.tabNum).setLang("Makefile")
+            elif e == "m":
+                self.getEditor(self.tabNum).setLang("MATLAB")
+            elif e == "pas" or e == "inc":
+                self.getEditor(self.tabNum).setLang("Pascal")
+            elif e == "ps":
+                self.getEditor(self.tabNum).setLang("PostScript")
+            elif e == "pov" or e == "tga":
+                self.getEditor(self.tabNum).setLang("POV-Ray")
+            elif e == "py" or e == "pyw":
+                self.getEditor(self.tabNum).setLang("Python")
+                #print "p"
+            elif e == "rb" or e == "rbw":
+                self.getEditor(self.tabNum).setLang("Ruby")
+            elif e == "cir":
+                self.getEditor(self.tabNum).setLang("Spice")
+            elif e == "sql":
+                self.getEditor(self.tabNum).setLang("SQL")
+            elif e == "tcl":
+                self.getEditor(self.tabNum).setLang("TCL")
+            elif e == "tex":
+                self.getEditor(self.tabNum).setLang("TeX")
+            elif e == "v" or e == "sv" or e == "vh" or e == "svh":
+                self.getEditor(self.tabNum).setLang("Verilog")
+            elif e == "vhd" or e == "vhdl":
+                self.getEditor(self.tabNum).setLang("VHDL")
+            elif e == "xml" or e == "xsl" or e == "xsml" or e == "xsd" or \
+            e == "kml" or e == "wsdl" or e == "xlf" or e == "xliff":
+                self.getEditor(self.tabNum).setLang("XML")
+            elif e == "yml":
+                self.getEditor(self.tabNum).setLang("YML")
+        except (ValueError, IndexError):
+                self.lexer = QsciLexerText()
+                self.lexer.setDefaultFont(config.font)
+                self.lexer.setDefaultColor(QColor("Black"))
+                self.getEditor(self.tabNum).setLexer(self.lexer)
+                self.noLexAct.setChecked(True)
+
+    def readSettings(self):
+        # The default fonts represented as a toString() list
+        DEFAULT_FONT = str(config.font.family())+",12,-1,5,50,0,0,0,0,0"
+        settings = QSettings()
+        if config.font.fromString(settings.value("Editor/font",
+                                                QVariant(DEFAULT_FONT),type=str)):
+            #config.lexer.setDefaultColor(QColor("Black"))
+            config.lexer.setFont(config.font)
+            
+    def chooseFont(self):
+        font, ok = QFontDialog.getFont()
+        if ok:
+            config.font = font
+            try:
+                self.getEditor(self.tab.currentIndex()).lexer().setFont(config.font)
+            except AttributeError:
+                self.getEditor(self.tab.currentIndex()).setLang(QsciLexerText())
+                #print self.getEditor(self.tab.currentIndex()).lexer()
+                self.getEditor(self.tab.currentIndex()).lexer().setFont(config.font)
 
     def set_cursor_pointer(self, e: QEnterEvent) -> None:
         self.setCursor(Qt.PointingHandCursor)
@@ -144,7 +254,7 @@ class MainWindow(QMainWindow):
         
         
         self.field_result_output = QTextBrowser(self.console_bar)
-        self.field_result_output.setStyleSheet("background-color: #2b2b2b; color: #a4a3a3; border-width: 2px; border-style: solid; border-color: #555555 #555555 #555555 #555555;")
+        self.field_result_output.setStyleSheet("background-color: #F4F9F9; color: #a4a3a3; border-width: 2px; border-style: solid; border-color: #555555 #555555 #555555 #555555;")
         sizePolicy = QSizePolicy(QSizePolicy.Minimum,QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -384,6 +494,7 @@ class MainWindow(QMainWindow):
     def set_up_menu(self):
         # Create a menu bar ,
         menu_bar = self.menuBar()
+        
 
         # File menu
         file_menu = menu_bar.addMenu("File")
@@ -407,6 +518,19 @@ class MainWindow(QMainWindow):
         open_folder_action = QAction("Open Folder", self)
         open_folder_action.setShortcut("Ctrl+K")
         open_folder_action.triggered.connect(self.open_folder)
+        
+        self.toggleIntAct = QAction("Indentation Guides",self)
+        self.toggleIntAct.triggered.connect(self.toggleIntGuide)
+        self.toggleIntAct.setCheckable(True)
+        self.toggleIntAct.setChecked(True)
+
+        self.toggleLNAct = QAction("Line Numbers",self)
+        self.toggleLNAct.triggered.connect(self.toggleLN)
+        self.toggleLNAct.setCheckable(True)
+        self.toggleLNAct.setChecked(True)
+        
+        self.fontAct = QAction("Choose Font",self)
+        self.fontAct.triggered.connect(self.chooseFont)
 
         # Add the menu item to the menu
         file_menu.addAction(new_file)
@@ -416,6 +540,9 @@ class MainWindow(QMainWindow):
         file_menu.addAction(save_file)
         file_menu.addAction(save_as)
         file_menu.addSeparator()
+        file_menu.addAction(self.toggleIntAct)
+        file_menu.addAction(self.toggleLNAct)
+        file_menu.addAction(self.fontAct)
         
          # Add el menu de ejecutar
         run_menu = menu_bar.addMenu("Run")
@@ -452,6 +579,15 @@ class MainWindow(QMainWindow):
         copy_action.triggered.connect(self.copy)
 
         edit_menu.addAction(copy_action)
+        
+        # GIT_MENU
+        
+        git_menu = menu_bar.addMenu("Save GIT")
+        save_git = QAction("SaveGit",self)
+        save_git.setShortcut("Ctrl+G")
+        save_git.triggered.connect(self.save_git)
+        
+        git_menu.addAction(save_git)
 
     def is_binary(self, path):
         """
@@ -618,6 +754,17 @@ class MainWindow(QMainWindow):
         stdout = bytes(data).decode("utf8")
         self.field_result_output.append(stdout)
         
+    
+    def save_git(self):
+        
+        # Clonamos el repositorio a nuestra computadora 
+        os.system("git clone <url del repositorio>")  
+
+        # Guardamos los cambios localmente  
+
+        os.system("git add . && git commit -m 'Actualización' && git push origin master")
+        
+    
     def closeEvent(self, event):
         self.save_file()
         reply = QMessageBox.question(self, 'Exit',
@@ -628,6 +775,30 @@ class MainWindow(QMainWindow):
             event.accept()
         else:
             event.ignore()
+      
+    
+    def toggleLN(self):
+        state = self.edit.marginLineNumbers(0)
+        self.edit.setMarginLineNumbers(0, not state)
+        self.edit.setMarginWidth(0,0) if state == True else self.edit. \
+                                setMarginWidth(0,self.edit.metrics.width("00000"))
+                                
+    def chooseFont(self):
+        font, ok = QFontDialog.getFont()
+        if ok:
+            config.font = font
+            try:
+                self.getEditor(self.tab.currentIndex()).lexer().setFont(config.font)
+            except AttributeError:
+                self.getEditor(self.tab.currentIndex()).setLang(QsciLexerText())
+                #print self.getEditor(self.tab.currentIndex()).lexer()
+                self.getEditor(self.tab.currentIndex()).lexer().setFont(config.font)
+      
+            
+    def toggleIntGuide(self):
+        state = self.edit.indentationGuides()
+        self.edit.setIndentationGuides(not state)
+    
 
 
 if __name__ == "__main__":

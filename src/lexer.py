@@ -1,10 +1,11 @@
 import re
 from PyQt5.QtGui import QFont, QColor
-from PyQt5.Qsci import QsciLexerCustom, QsciScintilla
+from PyQt5.Qsci import QsciLexerCustom, QsciScintilla,QsciLexerPython
 import keyword
 import types
 import builtins
 import json
+
 
 
 # QFont::Thin	100	100
@@ -19,7 +20,7 @@ import json
 
 
 
-class PyCustomLexer(QsciLexerCustom):
+class PyCustomLexer(QsciLexerPython):
     def __init__(self, parent, theme=None):
         super(PyCustomLexer, self).__init__(parent)
 
@@ -35,7 +36,8 @@ class PyCustomLexer(QsciLexerCustom):
         self.setDefaultColor(QColor("#abb2bf"))
         self.setDefaultPaper(QColor("#282c34"))
         self.setDefaultFont(QFont("Consolas", 14))
-
+   
+        
         self.KEYWORDS_LIST = keyword.kwlist
 
         self.builtin_function_names = [
