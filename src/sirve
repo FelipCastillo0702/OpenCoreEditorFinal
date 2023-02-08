@@ -1,9 +1,0 @@
-
-
-Puedes usar el método text() para obtener el contenido de un QLabel y asignarlo a una variable:
-
-// Obtener el contenido de un QLabel
-QString texto = label->text();
-
-// Asignarlo a una variable
-QString contenidoLabel = texto;

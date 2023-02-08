@@ -785,6 +785,22 @@ class MainWindow(QMainWindow):
         
     def back_git1(self):
         ...
+        #self.ventana = QWidget()
+        #self.etiqueta = QLabel('Ingrese su Ruta de Github',self.ventana)
+        #self.cuadroTexto = QLineEdit(self.ventana)
+        #self.boton = QPushButton(self.ventana)
+        #self.boton.setObjectName("boton")
+        #self.boton.setText("Create")
+        #self.etiqueta.move(50, 20)
+        #self.cuadroTexto.move(50, 50)
+        
+        #self.cuadroTexto.setGeometry(40,40,300,40)
+        #self.ventana.setGeometry(100, 100, 400, 100)
+
+        #self.ventana.show()     
+        
+        #text = self.cuadroTexto
+        
         #ruta_proyecto = os.getcwd()
         
         
@@ -793,26 +809,41 @@ class MainWindow(QMainWindow):
     def back_git(self):
         
         self.ventana = QWidget()
-        self.etiqueta = QLabel('Ingrese su Ruta de Github',self.ventana)
-        self.cuadroTexto = QLineEdit(self.ventana)
-        self.boton = QPushButton(self.ventana)
-        self.button_create_new_file.setObjectName("create_new_file_button")
-        self.etiqueta.move(50, 20)
-        self.cuadroTexto.move(50, 50)
-        
-        self.cuadroTexto.setGeometry(40,40,300,40)
-        self.ventana.setGeometry(100, 100, 400, 100)
 
-        self.ventana.show()     
+        # Crear cuadro de texto para ingresar URL   
+        self.textbox = QLineEdit(self.ventana)   
         
-        text = self.cuadroTexto.text()
-        
-        #with open('mi_archivo.txt', 'w') as f:
-        #    f.write(text)
+        # Crear etiqueta para el cuadro de texto para ingresar URL  
+        self.label = QLabel("Ingresar URL:", self.ventana) 
+
+        # Boton para ingresar la url  
+        self.button = QPushButton("Ingresar", self.ventana)    
+
+        # Posiciones en la ventana  
+        self.label.move(50, 25)   
+
+        # Posiciones en la ventana   
+        self.textbox.move(50, 50)    
+
+         # Posiciones en la ventana   
+        self.button.move(150, 80)    
+
+         # Señal al hacer click sobre el botón     
+        self.button.clicked.connect(self._click_action)   
+
+        # Mostrar todos los elementos en la pantalla  
+        self.ventana.show()  
+          
+
+    def _click_action (self):      
+
+            ruta= str(self.textbox.text())  
             
-        ruta_proyecto = os.getcwd()
+            ruta_proyecto = os.getcwd()
         
-        repo = Repo.clone_from(text, ruta_proyecto)
+            repo = Repo.clone_from(ruta, ruta_proyecto)        
+
+            print("URL ingresada: ", ruta )
         
         
     
