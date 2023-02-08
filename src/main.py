@@ -12,6 +12,8 @@ import config,sys,os
 from pathlib import Path
 import jedi
 import git
+from git import Repo
+import inspect
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -25,6 +27,7 @@ class MainWindow(QMainWindow):
         
         self.envs = list(jedi.find_virtualenvs())
         self.init_ui()
+
 
     @property
     def current_file(self) -> Path:
@@ -408,7 +411,7 @@ class MainWindow(QMainWindow):
         welcome_layout.setContentsMargins(0, 0, 0, 0)
         welcome_layout.setSpacing(20)
         welcome_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
+        
 
         wlcm_title = self.create_label(
             "Bienvenido a OpencorEditor!",
@@ -427,10 +430,16 @@ class MainWindow(QMainWindow):
 
         welcome_layout.addWidget(wlcm_title)
         welcome_layout.addWidget(wlcm_msg)
-        self.welcome_frame.setLayout(welcome_layout)
+        self.welcome_frame.setLayout(welcome_layout)    
+        
+        
+        
+        
+        #self.ruta = self.etiqueta.text()
 
         # add file manager and tab view
         self.hsplit.addWidget(self.file_manager_frame)
+        #self.hsplit.addWidget(self.ventana)
         self.hsplit.addWidget(self.welcome_frame)
         self.current_side_bar = self.file_manager_frame
         
@@ -587,7 +596,12 @@ class MainWindow(QMainWindow):
         save_git.setShortcut("Ctrl+G")
         save_git.triggered.connect(self.save_git)
         
+        back_git = QAction("BackGit",self)
+        back_git.setShortcut("Ctrl+B")
+        back_git.triggered.connect(self.back_git)
+        
         git_menu.addAction(save_git)
+        git_menu.addAction(back_git)
 
     def is_binary(self, path):
         """
@@ -768,6 +782,45 @@ class MainWindow(QMainWindow):
         origin = repo.remote('origin')   
         
         origin.push()
+        
+    def back_git1(self):
+        ...
+        #ruta_proyecto = os.getcwd()
+        
+        
+        #repo = Repo.clone_from(ruta_git, ruta_proyecto)
+        
+    def back_git(self):
+        
+        self.ventana = QWidget()
+        self.etiqueta = QLabel('Ingrese su Ruta de Github',self.ventana)
+        self.cuadroTexto = QLineEdit(self.ventana)
+        self.boton = QPushButton(self.ventana)
+        self.button_create_new_file.setObjectName("create_new_file_button")
+        self.etiqueta.move(50, 20)
+        self.cuadroTexto.move(50, 50)
+        
+        self.cuadroTexto.setGeometry(40,40,300,40)
+        self.ventana.setGeometry(100, 100, 400, 100)
+
+        self.ventana.show()     
+        
+        text = self.cuadroTexto.text()
+        
+        #with open('mi_archivo.txt', 'w') as f:
+        #    f.write(text)
+            
+        ruta_proyecto = os.getcwd()
+        
+        repo = Repo.clone_from(text, ruta_proyecto)
+        
+        
+    
+    def showTextBox(self): #Funcion para mostrar un cuadro de texto  
+
+        textbox = QLineEdit(self)#Crear un cuadro de texto  
+        textbox.setFixedSize(200, 40) 
+        textbox.setStyleSheet('background-color: #F8F8FF;')
         
     
     def closeEvent(self, event):
