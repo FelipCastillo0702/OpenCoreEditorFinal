@@ -64,105 +64,105 @@ class MainWindow(QMainWindow):
 
         return editor
     
-    def initLexers(self):
-        # Dict that maps lexer actions to their respective strings
-        self.lexActs = {}
-        langGrp = QActionGroup(self.lang)
-        langGrp.setExclusive(True)
-        self.lang.addAction(self.noLexAct)
-        self.noLexAct.setCheckable(True)
+    #def initLexers(self):
+    #    # Dict that maps lexer actions to their respective strings
+    #    self.lexActs = {}
+    #    langGrp = QActionGroup(self.lang)
+    #    langGrp.setExclusive(True)
+    #    self.lang.addAction(self.noLexAct)
+    #    self.noLexAct.setCheckable(True)
         #self.noLexAct.setChecked(True)
-        self.noLexAct.setActionGroup(langGrp)
-        self.lang.addSeparator()
-        languages = sorted(config.LEXERS.keys())
-        for i in languages:
-            langAct = self.lang.addAction(i)
-            langAct.setCheckable(True)
-            langAct.setActionGroup(langGrp)
-            self.lexActs[langAct] = i
-        langGrp.triggered.connect(lambda lex: self.getEditor(self.tabNum+1).setLang(self.lexActs.get(lex)))
+    #    self.noLexAct.setActionGroup(langGrp)
+    #    self.lang.addSeparator()
+    #    languages = sorted(config.LEXERS.keys())
+    #    for i in languages:
+    #        langAct = self.lang.addAction(i)
+    #        langAct.setCheckable(True)
+    #        langAct.setActionGroup(langGrp)
+    #        self.lexActs[langAct] = i
+    #    langGrp.triggered.connect(lambda lex: self.getEditor(self.tabNum+1).setLang(self.lexActs.get(lex)))
     
     
-    def guessLexer(self):
-        try:
-            x = config.docList[self.tab.currentIndex()+1]
-            n, e = os.path.basename(x).lower().split(".")
-            if e == "sh" or e == "bsh":
-                self.getEditor(self.tabNum).setLang("Bash")
-            elif e == "cmd" or e == "bat" or e == "btm" or e == "nt":
-                self.getEditor(self.tabNum).setLang("Batch")
-            elif e == "cmake" or e == "cmakelists":
-                self.getEditor(self.tabNum).setLang("CMake")
-            elif e == "cpp" or e == "cxx" or e == "cc" or e == "c" or e == "h"\
-            or e == "hh" or e == "hpp":
-                self.getEditor(self.tabNum).setLang("C++")
-            elif e == "cs":
-                self.getEditor(self.tabNum).setLang("C#")
-            elif e == "css":
-                self.getEditor(self.tabNum).setLang("CSS")
-            elif e == "d":
-                self.getEditor(self.tabNum).setLang("D")
-            elif e == "diff" or e == "patch":
-                self.getEditor(self.tabNum).setLang("Diff")
-            elif e == "f90" or e == "f95" or e == "f2k" or e == "f03" or e == "f15":
-                self.getEditor(self.tabNum).setLang("Fortran")
-            elif e == "f" or e == "for":
-                self.getEditor(self.tabNum).setLang("Fortran77")
-            elif e == "html" or e == "htm":
-                self.getEditor(self.tabNum).setLang("HTML")
-            elif e == "java":
-                self.getEditor(self.tabNum).setLang("Java")
-            elif e == "js":
-                self.getEditor(self.tabNum).setLang("JavaScript")
-            elif e == "lua":
-                self.getEditor(self.tabNum).setLang("Lua")
-            elif e == "mak" or n == "gnumakefile" or n == "makefile":
-                self.getEditor(self.tabNum).setLang("Makefile")
-            elif e == "m":
-                self.getEditor(self.tabNum).setLang("MATLAB")
-            elif e == "pas" or e == "inc":
-                self.getEditor(self.tabNum).setLang("Pascal")
-            elif e == "ps":
-                self.getEditor(self.tabNum).setLang("PostScript")
-            elif e == "pov" or e == "tga":
-                self.getEditor(self.tabNum).setLang("POV-Ray")
-            elif e == "py" or e == "pyw":
-                self.getEditor(self.tabNum).setLang("Python")
-                #print "p"
-            elif e == "rb" or e == "rbw":
-                self.getEditor(self.tabNum).setLang("Ruby")
-            elif e == "cir":
-                self.getEditor(self.tabNum).setLang("Spice")
-            elif e == "sql":
-                self.getEditor(self.tabNum).setLang("SQL")
-            elif e == "tcl":
-                self.getEditor(self.tabNum).setLang("TCL")
-            elif e == "tex":
-                self.getEditor(self.tabNum).setLang("TeX")
-            elif e == "v" or e == "sv" or e == "vh" or e == "svh":
-                self.getEditor(self.tabNum).setLang("Verilog")
-            elif e == "vhd" or e == "vhdl":
-                self.getEditor(self.tabNum).setLang("VHDL")
-            elif e == "xml" or e == "xsl" or e == "xsml" or e == "xsd" or \
-            e == "kml" or e == "wsdl" or e == "xlf" or e == "xliff":
-                self.getEditor(self.tabNum).setLang("XML")
-            elif e == "yml":
-                self.getEditor(self.tabNum).setLang("YML")
-        except (ValueError, IndexError):
-                self.lexer = QsciLexerText()
-                self.lexer.setDefaultFont(config.font)
-                self.lexer.setDefaultColor(QColor("Black"))
-                self.getEditor(self.tabNum).setLexer(self.lexer)
-                self.noLexAct.setChecked(True)
+    #def guessLexer(self):
+        #try:
+        #    x = config.docList[self.tab.currentIndex()+1]
+        #    n, e = os.path.basename(x).lower().split(".")
+        #    if e == "sh" or e == "bsh":
+        #        self.getEditor(self.tabNum).setLang("Bash")
+        #    elif e == "cmd" or e == "bat" or e == "btm" or e == "nt":
+        #        self.getEditor(self.tabNum).setLang("Batch")
+        #    elif e == "cmake" or e == "cmakelists":
+        #        self.getEditor(self.tabNum).setLang("CMake")
+        #    elif e == "cpp" or e == "cxx" or e == "cc" or e == "c" or e == "h"\
+        #    or e == "hh" or e == "hpp":
+        #        self.getEditor(self.tabNum).setLang("C++")
+        #    elif e == "cs":
+        #        self.getEditor(self.tabNum).setLang("C#")
+        #    elif e == "css":
+        #        self.getEditor(self.tabNum).setLang("CSS")
+        #    elif e == "d":
+        #        self.getEditor(self.tabNum).setLang("D")
+        #    elif e == "diff" or e == "patch":
+        #        self.getEditor(self.tabNum).setLang("Diff")
+        #    elif e == "f90" or e == "f95" or e == "f2k" or e == "f03" or e == "f15":
+        #        self.getEditor(self.tabNum).setLang("Fortran")
+        #    elif e == "f" or e == "for":
+        #        self.getEditor(self.tabNum).setLang("Fortran77")
+        #    elif e == "html" or e == "htm":
+        #        self.getEditor(self.tabNum).setLang("HTML")
+        #    elif e == "java":
+        #        self.getEditor(self.tabNum).setLang("Java")
+        #    elif e == "js":
+        #        self.getEditor(self.tabNum).setLang("JavaScript")
+        #    elif e == "lua":
+        #        self.getEditor(self.tabNum).setLang("Lua")
+        #    elif e == "mak" or n == "gnumakefile" or n == "makefile":
+        #        self.getEditor(self.tabNum).setLang("Makefile")
+        #    elif e == "m":
+        #        self.getEditor(self.tabNum).setLang("MATLAB")
+        #    elif e == "pas" or e == "inc":
+        #        self.getEditor(self.tabNum).setLang("Pascal")
+        #    elif e == "ps":
+        #        self.getEditor(self.tabNum).setLang("PostScript")
+        #    elif e == "pov" or e == "tga":
+        #        self.getEditor(self.tabNum).setLang("POV-Ray")
+        #    elif e == "py" or e == "pyw":
+        #        self.getEditor(self.tabNum).setLang("Python")
+        #        #print "p"
+        #    elif e == "rb" or e == "rbw":
+        #        self.getEditor(self.tabNum).setLang("Ruby")
+        #    elif e == "cir":
+        #        self.getEditor(self.tabNum).setLang("Spice")
+        #    elif e == "sql":
+        #        self.getEditor(self.tabNum).setLang("SQL")
+        #    elif e == "tcl":
+        #        self.getEditor(self.tabNum).setLang("TCL")
+        #    elif e == "tex":
+        #        self.getEditor(self.tabNum).setLang("TeX")
+        #    elif e == "v" or e == "sv" or e == "vh" or e == "svh":
+        #        self.getEditor(self.tabNum).setLang("Verilog")
+        #    elif e == "vhd" or e == "vhdl":
+        #        self.getEditor(self.tabNum).setLang("VHDL")
+        #    elif e == "xml" or e == "xsl" or e == "xsml" or e == "xsd" or \
+        #    e == "kml" or e == "wsdl" or e == "xlf" or e == "xliff":
+        #        self.getEditor(self.tabNum).setLang("XML")
+        #    elif e == "yml":
+        #        self.getEditor(self.tabNum).setLang("YML")
+        #except (ValueError, IndexError):
+        #        self.lexer = QsciLexerText()
+        #        self.lexer.setDefaultFont(config.font)
+        #        self.lexer.setDefaultColor(QColor("Black"))
+        #        self.getEditor(self.tabNum).setLexer(self.lexer)
+        #        self.noLexAct.setChecked(True)
 
-    def readSettings(self):
-        # The default fonts represented as a toString() list
-        DEFAULT_FONT = str(config.font.family())+",12,-1,5,50,0,0,0,0,0"
-        settings = QSettings()
-        if config.font.fromString(settings.value("Editor/font",
-                                                QVariant(DEFAULT_FONT),type=str)):
-            #config.lexer.setDefaultColor(QColor("Black"))
-            config.lexer.setFont(config.font)
+    #def readSettings(self):
+    #    # The default fonts represented as a toString() list
+    #    DEFAULT_FONT = str(config.font.family())+",12,-1,5,50,0,0,0,0,0"
+    #    settings = QSettings()
+    #    if config.font.fromString(settings.value("Editor/font",
+    #                                            QVariant(DEFAULT_FONT),type=str)):
+    #        #config.lexer.setDefaultColor(QColor("Black"))
+    #        config.lexer.setFont(config.font)
             
     def chooseFont(self):
         font, ok = QFontDialog.getFont()
@@ -223,6 +223,7 @@ class MainWindow(QMainWindow):
         lbl.setContentsMargins(0, 0, 0, 0)
         lbl.setMaximumHeight(min_height)
         return lbl
+
 
     def setUpBody(self):
         ###############################################
@@ -434,10 +435,7 @@ class MainWindow(QMainWindow):
         self.welcome_frame.setLayout(welcome_layout)    
         
         
-        
-        
-        #self.ruta = self.etiqueta.text()
-
+    
         # add file manager and tab view
         self.hsplit.addWidget(self.file_manager_frame)
         #self.hsplit.addWidget(self.ventana)
@@ -601,6 +599,11 @@ class MainWindow(QMainWindow):
         back_git.setShortcut("Ctrl+B")
         back_git.triggered.connect(self.back_git)
         
+        crear_repositorio = QAction("CrearRepo",self)
+        crear_repositorio.setShortcut("Ctrl+Shit+C")
+        crear_repositorio.triggered.connect(self.crear_repositorio)
+        
+        git_menu.addAction(crear_repositorio)
         git_menu.addAction(save_git)
         git_menu.addAction(back_git)
 
@@ -774,7 +777,9 @@ class MainWindow(QMainWindow):
     
     def save_git(self):
         
-        repo_dir = "/Users/felipecastillo/Desktop/ProyectosFelipe/Visual Studio/OpenCoreEditorFinal/.git/"
+        #repo_dir = "/Users/felipecastillo/Desktop/ProyectosFelipe/Visual Studio/OpenCoreEditorFinal/.git/"
+        
+        repo_dir = os.getcwd()
         
         repo = git.Repo(repo_dir)
         
@@ -786,7 +791,85 @@ class MainWindow(QMainWindow):
         
         origin.push()
         
+    
+    def crear_repositorio(self): 
         
+        self.ventana4 = QWidget()
+
+        # Crear cuadro de texto para ingresar URL   
+        self.textbox4 = QLineEdit(self.ventana4)   
+        
+        # Crear etiqueta para el cuadro de texto para ingresar URL  
+        self.label4 = QLabel("Ingresar nombre de usuario GitHub: ", self.ventana4) 
+
+        # Boton para ingresar la url  
+        self.button4 = QPushButton("Ingresar", self.ventana4)    
+
+        # Posiciones en la ventana  
+        self.label4.move(60, 25)   
+
+        # Posiciones en la ventana   
+        self.textbox4.move(60, 50)    
+
+         # Posiciones en la ventana   
+        self.button4.move(100, 260) 
+        
+        self.ventana5 = QWidget()             
+        # Crear cuadro de texto para ingresar URL            
+        self.textbox5 = QLineEdit(self.ventana4)                     
+        # # Crear etiqueta para el cuadro de texto para ingresar URL           
+        self.label5 = QLabel("Ingresar nombre del repo:", self.ventana4)           
+        # # Boton para ingresar la url           
+        #self.button2 = QPushButton("Ingresar", self.ventana)              
+        # # Posiciones en la ventana           
+        self.label5.move(60, 120)             
+        # # Posiciones en la ventana            
+        self.textbox5.move(60, 150)               
+        # # Posiciones en la ventana            
+        #self.button2.move(150, 180)
+        
+        #self.ventana6 = QWidget()             
+        # Crear cuadro de texto para ingresar URL            
+        #self.textbox6 = QLineEdit(self.ventana4)                     
+        # # Crear etiqueta para el cuadro de texto para ingresar URL           
+        #self.label6 = QLabel("Ingresar ruta de su repo:", self.ventana4)           
+        # # Boton para ingresar la url           
+        #self.button3 = QPushButton("Ingresar", self.ventana)              
+        # # Posiciones en la ventana           
+        #self.label6.move(60, 200)             
+        # # Posiciones en la ventana            
+        #self.textbox6.move(60, 220)               
+        # # Posiciones en la ventana            
+        #self.button3.move(150, 180)
+        
+        # Señal al hacer click sobre el botón     
+        git_url = self.button4.clicked.connect(self.ruta) 
+          
+        # Mostrar todos los elementos en la pantalla  
+        self.ventana4.show() 
+    
+    
+    def ruta(self,url):
+        
+        nom_repo = str(self.textbox5.text())
+        
+        nom_usuario = str(self.textbox4.text())
+        
+        carpeta = os.getcwd()
+        
+        repo = git.Repo.init(carpeta) #Crea el repositorio en la carpeta mi_codigo 
+
+        os.chdir(carpeta) #Cambia el directorio de trabajo a la carpeta del repositorio creado
+
+        repo.index.add(['carpeta/*']) #Agrega todos los archivos de la carpeta al repositorio
+
+        repo.index.commit("Guardado en GitHub") #Realiza el commit con el mensaje "Guardado en GitHub"
+
+        origin = repo.create_remote('origin', 'https://github.com/nom_usuario/nom_repo.git') #Crea un remoto llamado "origin" en el repositorio de Github indicado
+
+        origin.push() #Envia los cambios al repositorio remoto
+        
+    
     def back_git(self):
         
         
