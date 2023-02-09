@@ -12,6 +12,9 @@ import config,sys,os
 from pathlib import Path
 import jedi
 import git
+#from git import Repo
+from github import Github 
+import inspect
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -25,6 +28,7 @@ class MainWindow(QMainWindow):
         
         self.envs = list(jedi.find_virtualenvs())
         self.init_ui()
+
 
     @property
     def current_file(self) -> Path:
@@ -408,7 +412,7 @@ class MainWindow(QMainWindow):
         welcome_layout.setContentsMargins(0, 0, 0, 0)
         welcome_layout.setSpacing(20)
         welcome_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
+        
 
         wlcm_title = self.create_label(
             "Bienvenido a OpencorEditor!",
@@ -427,10 +431,16 @@ class MainWindow(QMainWindow):
 
         welcome_layout.addWidget(wlcm_title)
         welcome_layout.addWidget(wlcm_msg)
-        self.welcome_frame.setLayout(welcome_layout)
+        self.welcome_frame.setLayout(welcome_layout)    
+        
+        
+        
+        
+        #self.ruta = self.etiqueta.text()
 
         # add file manager and tab view
         self.hsplit.addWidget(self.file_manager_frame)
+        #self.hsplit.addWidget(self.ventana)
         self.hsplit.addWidget(self.welcome_frame)
         self.current_side_bar = self.file_manager_frame
         
@@ -587,7 +597,12 @@ class MainWindow(QMainWindow):
         save_git.setShortcut("Ctrl+G")
         save_git.triggered.connect(self.save_git)
         
+        back_git = QAction("BackGit",self)
+        back_git.setShortcut("Ctrl+B")
+        back_git.triggered.connect(self.back_git)
+        
         git_menu.addAction(save_git)
+        git_menu.addAction(back_git)
 
     def is_binary(self, path):
         """
@@ -677,16 +692,18 @@ class MainWindow(QMainWindow):
         f = Path(new_file)
         self.set_new_tab(f)
 
-    def open_folder(self):
+    def open_folder(self, ):
         ops = QFileDialog.Options()
         ops |= QFileDialog.DontUseNativeDialog
         new_folder = QFileDialog.getExistingDirectory(
             self, "Pick A Folder", "", options=ops
         )
         if new_folder:
+            self.model = QFileSystemModel()
             self.model.setRootPath(new_folder)
             self.file_manager.setRootIndex(self.model.index(new_folder))
             self.statusBar().showMessage(f"Opened {new_folder}", 2000)
+            
             
     def exit_the_program(self):
         self.close()        
@@ -754,16 +771,95 @@ class MainWindow(QMainWindow):
         stdout = bytes(data).decode("utf8")
         self.field_result_output.append(stdout)
         
-        a
     
     def save_git(self):
         
-        # Clonamos el repositorio a nuestra computadora 
-        os.system("git clone <url del repositorio>")  
+        repo_dir = "/Users/felipecastillo/Desktop/ProyectosFelipe/Visual Studio/OpenCoreEditorFinal/.git/"
+        
+        repo = git.Repo(repo_dir)
+        
+        repo.git.add(A=True)
+    
+        repo.index.commit("Mensaje del commit") 
+        
+        origin = repo.remote('origin')   
+        
+        origin.push()
+        
+        
+    def back_git(self):
+        
+        
+        self.ventana = QWidget()
 
-        # Guardamos los cambios localmente  
+        # Crear cuadro de texto para ingresar URL   
+        self.textbox = QLineEdit(self.ventana)   
+        
+        # Crear etiqueta para el cuadro de texto para ingresar URL  
+        self.label = QLabel("Ingresar Usuario de Github : ", self.ventana) 
 
-        os.system("git add . && git commit -m 'Actualización' && git push origin master")
+        # Boton para ingresar la url  
+        self.button = QPushButton("Ingresar", self.ventana)    
+
+        # Posiciones en la ventana  
+        self.label.move(60, 25)   
+
+        # Posiciones en la ventana   
+        self.textbox.move(60, 50)    
+
+         # Posiciones en la ventana   
+        self.button.move(100, 260)    
+        
+        self.ventana2 = QWidget()             
+        # Crear cuadro de texto para ingresar URL            
+        self.textbox2 = QLineEdit(self.ventana)                     
+        # # Crear etiqueta para el cuadro de texto para ingresar URL           
+        self.label2 = QLabel("Ingresar Contraseña:", self.ventana)           
+        # # Boton para ingresar la url           
+        #self.button2 = QPushButton("Ingresar", self.ventana)              
+        # # Posiciones en la ventana           
+        self.label2.move(60, 120)             
+        # # Posiciones en la ventana            
+        self.textbox2.move(60, 150)               
+        # # Posiciones en la ventana            
+        #self.button2.move(150, 180)
+        
+        self.ventana3 = QWidget()             
+        # Crear cuadro de texto para ingresar URL            
+        self.textbox3 = QLineEdit(self.ventana)                     
+        # # Crear etiqueta para el cuadro de texto para ingresar URL           
+        self.label3 = QLabel("Ingresar ruta de su repo:", self.ventana)           
+        # # Boton para ingresar la url           
+        #self.button3 = QPushButton("Ingresar", self.ventana)              
+        # # Posiciones en la ventana           
+        self.label3.move(60, 200)             
+        # # Posiciones en la ventana            
+        self.textbox3.move(60, 220)               
+        # # Posiciones en la ventana            
+        #self.button3.move(150, 180)
+
+         # Señal al hacer click sobre el botón     
+        self.button.clicked.connect(self.descargar_repositorio) 
+          
+        # Mostrar todos los elementos en la pantalla  
+        self.ventana.show()  
+        #self.ventana1.show()
+                  
+    
+    def descargar_repositorio(self,url):
+        #Descarga un repositorio de Github en el directorio indicado.
+
+        #Argumentos:
+        #url (str): La dirección URL del repositorio.
+        #directorio (str): El directorio donde se guardará el proyecto.
+
+        #Devuelve:
+        #None.
+        
+        ruta_repo = str(self.textbox3.text())
+         
+        # Descargar el repositorio en el directorio indicado.
+        git.Git(os.getcwd()).clone(ruta_repo)
         
     
     def closeEvent(self, event):

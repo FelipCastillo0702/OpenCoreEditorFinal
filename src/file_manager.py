@@ -24,7 +24,6 @@ class FileManager(QTreeView):
 
         self.manager_font = QFont("FiraCode", 13)
         
-        
         self.model: QFileSystemModel = QFileSystemModel()
         self.model.setRootPath(os.getcwd())
         # File system filters
