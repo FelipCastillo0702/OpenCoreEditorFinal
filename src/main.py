@@ -12,7 +12,7 @@ import config,sys,os
 from pathlib import Path
 import jedi
 import git
-from git import Repo
+#from git import Repo
 import inspect
 
 class MainWindow(QMainWindow):
@@ -691,16 +691,18 @@ class MainWindow(QMainWindow):
         f = Path(new_file)
         self.set_new_tab(f)
 
-    def open_folder(self):
+    def open_folder(self, ):
         ops = QFileDialog.Options()
         ops |= QFileDialog.DontUseNativeDialog
         new_folder = QFileDialog.getExistingDirectory(
             self, "Pick A Folder", "", options=ops
         )
         if new_folder:
+            self.model = QFileSystemModel()
             self.model.setRootPath(new_folder)
             self.file_manager.setRootIndex(self.model.index(new_folder))
             self.statusBar().showMessage(f"Opened {new_folder}", 2000)
+            
             
     def exit_the_program(self):
         self.close()        
@@ -808,6 +810,7 @@ class MainWindow(QMainWindow):
         
     def back_git(self):
         
+        
         self.ventana = QWidget()
 
         # Crear cuadro de texto para ingresar URL   
@@ -827,21 +830,41 @@ class MainWindow(QMainWindow):
 
          # Posiciones en la ventana   
         self.button.move(150, 80)    
+        
+        self.ventana2 = QWidget()             
+        # Crear cuadro de texto para ingresar URL            
+        self.textbox2 = QLineEdit(self.ventana)                     
+        # # Crear etiqueta para el cuadro de texto para ingresar URL           
+        self.label2 = QLabel("Ingresar nueva URL:", self.ventana)           
+        # # Boton para ingresar la url           
+        self.button2 = QPushButton("Ingresar", self.ventana)              
+        # # Posiciones en la ventana           
+        self.label2.move(50, 120)             
+        # # Posiciones en la ventana            
+        self.textbox2.move(50, 150)               
+        # # Posiciones en la ventana            
+        self.button2.move(150, 180)
 
          # Señal al hacer click sobre el botón     
         self.button.clicked.connect(self._click_action)   
 
         # Mostrar todos los elementos en la pantalla  
         self.ventana.show()  
+        #self.ventana1.show()
           
 
     def _click_action (self):      
 
-            ruta= str(self.textbox.text())  
+            ruta= str(self.textbox.text())
+            ruta1 = str(self.textbox2.text())  
+            #ruta2 = str()
             
-            ruta_proyecto = os.getcwd()
-        
-            repo = Repo.clone_from(ruta, ruta_proyecto)        
+            #g = Github(username=ruta, password=ruta1) 
+            # Obtiene el repositorio que quieres traer 
+
+            #repo = g.get_repo('el_nombre_del_repo') # Descarga el repositorio 
+
+            #repo.download()
 
             print("URL ingresada: ", ruta )
         
