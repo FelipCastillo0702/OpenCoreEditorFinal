@@ -13,6 +13,7 @@ from pathlib import Path
 import jedi
 import git
 #from git import Repo
+from github import Github 
 import inspect
 
 class MainWindow(QMainWindow):
@@ -785,28 +786,6 @@ class MainWindow(QMainWindow):
         
         origin.push()
         
-    def back_git1(self):
-        ...
-        #self.ventana = QWidget()
-        #self.etiqueta = QLabel('Ingrese su Ruta de Github',self.ventana)
-        #self.cuadroTexto = QLineEdit(self.ventana)
-        #self.boton = QPushButton(self.ventana)
-        #self.boton.setObjectName("boton")
-        #self.boton.setText("Create")
-        #self.etiqueta.move(50, 20)
-        #self.cuadroTexto.move(50, 50)
-        
-        #self.cuadroTexto.setGeometry(40,40,300,40)
-        #self.ventana.setGeometry(100, 100, 400, 100)
-
-        #self.ventana.show()     
-        
-        #text = self.cuadroTexto
-        
-        #ruta_proyecto = os.getcwd()
-        
-        
-        #repo = Repo.clone_from(ruta_git, ruta_proyecto)
         
     def back_git(self):
         
@@ -817,64 +796,70 @@ class MainWindow(QMainWindow):
         self.textbox = QLineEdit(self.ventana)   
         
         # Crear etiqueta para el cuadro de texto para ingresar URL  
-        self.label = QLabel("Ingresar URL:", self.ventana) 
+        self.label = QLabel("Ingresar Usuario de Github : ", self.ventana) 
 
         # Boton para ingresar la url  
         self.button = QPushButton("Ingresar", self.ventana)    
 
         # Posiciones en la ventana  
-        self.label.move(50, 25)   
+        self.label.move(60, 25)   
 
         # Posiciones en la ventana   
-        self.textbox.move(50, 50)    
+        self.textbox.move(60, 50)    
 
          # Posiciones en la ventana   
-        self.button.move(150, 80)    
+        self.button.move(100, 260)    
         
         self.ventana2 = QWidget()             
         # Crear cuadro de texto para ingresar URL            
         self.textbox2 = QLineEdit(self.ventana)                     
         # # Crear etiqueta para el cuadro de texto para ingresar URL           
-        self.label2 = QLabel("Ingresar nueva URL:", self.ventana)           
+        self.label2 = QLabel("Ingresar Contraseña:", self.ventana)           
         # # Boton para ingresar la url           
-        self.button2 = QPushButton("Ingresar", self.ventana)              
+        #self.button2 = QPushButton("Ingresar", self.ventana)              
         # # Posiciones en la ventana           
-        self.label2.move(50, 120)             
+        self.label2.move(60, 120)             
         # # Posiciones en la ventana            
-        self.textbox2.move(50, 150)               
+        self.textbox2.move(60, 150)               
         # # Posiciones en la ventana            
-        self.button2.move(150, 180)
+        #self.button2.move(150, 180)
+        
+        self.ventana3 = QWidget()             
+        # Crear cuadro de texto para ingresar URL            
+        self.textbox3 = QLineEdit(self.ventana)                     
+        # # Crear etiqueta para el cuadro de texto para ingresar URL           
+        self.label3 = QLabel("Ingresar ruta de su repo:", self.ventana)           
+        # # Boton para ingresar la url           
+        #self.button3 = QPushButton("Ingresar", self.ventana)              
+        # # Posiciones en la ventana           
+        self.label3.move(60, 200)             
+        # # Posiciones en la ventana            
+        self.textbox3.move(60, 220)               
+        # # Posiciones en la ventana            
+        #self.button3.move(150, 180)
 
          # Señal al hacer click sobre el botón     
-        self.button.clicked.connect(self._click_action)   
-
+        self.button.clicked.connect(self.descargar_repositorio) 
+          
         # Mostrar todos los elementos en la pantalla  
         self.ventana.show()  
         #self.ventana1.show()
-          
-
-    def _click_action (self):      
-
-            ruta= str(self.textbox.text())
-            ruta1 = str(self.textbox2.text())  
-            #ruta2 = str()
-            
-            #g = Github(username=ruta, password=ruta1) 
-            # Obtiene el repositorio que quieres traer 
-
-            #repo = g.get_repo('el_nombre_del_repo') # Descarga el repositorio 
-
-            #repo.download()
-
-            print("URL ingresada: ", ruta )
-        
-        
+                  
     
-    def showTextBox(self): #Funcion para mostrar un cuadro de texto  
+    def descargar_repositorio(self,url):
+        #Descarga un repositorio de Github en el directorio indicado.
 
-        textbox = QLineEdit(self)#Crear un cuadro de texto  
-        textbox.setFixedSize(200, 40) 
-        textbox.setStyleSheet('background-color: #F8F8FF;')
+        #Argumentos:
+        #url (str): La dirección URL del repositorio.
+        #directorio (str): El directorio donde se guardará el proyecto.
+
+        #Devuelve:
+        #None.
+        
+        ruta_repo = str(self.textbox3.text())
+         
+        # Descargar el repositorio en el directorio indicado.
+        git.Git(os.getcwd()).clone(ruta_repo)
         
     
     def closeEvent(self, event):
