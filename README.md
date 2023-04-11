@@ -19,4 +19,4 @@ Librerias que instalar
  - pip install QScintilla
  - pip install jedi
  - pip install 
- - pip install GitPython
+ - pip install gitPython
